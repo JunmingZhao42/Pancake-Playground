@@ -1,0 +1,187 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    background-color: #1e1e1e;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.editor-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    max-width: 60%;
+}
+
+.output-container {
+    flex: 0 0 60%;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.output-top-row {
+    display: flex;
+    flex-direction: row;
+    height: 150px;
+    min-height: 100px;
+    max-height: 300px;
+}
+
+.transpiler-panel, .compiler-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    min-width: 150px;
+}
+
+.viper-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    min-height: 100px;
+}
+
+.panel-header {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#editor {
+    flex: 1;
+    width: 100%;
+}
+
+#transpiler-output, #compiler-output {
+    flex: 1;
+    padding: 10px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    overflow: auto;
+}
+
+#viper-editor {
+    flex: 1;
+    width: 100%;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.button.compile {
+    background-color: #4CAF50;
+}
+
+.button.transpile {
+    background-color: #2196F3;
+}
+
+.button.compile:hover {
+    background-color: #45a049;
+}
+
+.button.transpile:hover {
+    background-color: #0b7dda;
+}
+
+/* Splitters */
+.vertical-splitter, .output-vertical-splitter {
+    width: 8px;
+    background-color: #ddd;
+    cursor: col-resize;
+    position: relative;
+}
+
+.vertical-splitter:hover, 
+.vertical-splitter.active,
+.output-vertical-splitter:hover,
+.output-vertical-splitter.active {
+    background-color: #aaa;
+}
+
+.vertical-splitter::after,
+.output-vertical-splitter::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    height: 30px;
+    width: 4px;
+    background-color: #888;
+    border-radius: 2px;
+    transform: translateY(-50%);
+}
+
+.horizontal-splitter {
+    height: 8px;
+    background-color: #ddd;
+    cursor: row-resize;
+    position: relative;
+}
+
+.horizontal-splitter:hover, 
+.horizontal-splitter.active {
+    background-color: #aaa;
+}
+
+.horizontal-splitter::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    width: 30px;
+    height: 4px;
+    background-color: #888;
+    border-radius: 2px;
+    transform: translateX(-50%);
+}
+
+.resize-active {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
