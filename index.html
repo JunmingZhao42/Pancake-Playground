@@ -3,22 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pancake Pan</title>
+    <title>Pancake Playground</title>
+    <link rel="icon" type="image/svg+xml" href="img/ts_key.svg">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="header">
-        <h2>Pancake Pan</h2>
-        <div class="button-group">
-            <button id="compile-button" class="button compile">Compile and Run (F9)</button>
-            <button id="transpile-button" class="button transpile">Transpile (F10)</button>
+        <div class="header-left">
+            <a href="https://www.unsw.edu.au" target="_blank class="logo-link">
+                <img src="img/UNSW.png" alt="UNSW Logo" class="logo">
+            </a>
+            <h2>🥞 Pancake Playground</h2>
+        </div>
+        <div class="header-right">
+            <a href="https://cakeml.org/pancake.html" target="_blank" rel="noopener noreferrer" class="logo-link">
+                <img src="img/pancake.png" alt="CakeML Pancake" class="logo">
+            </a>
+            <a href="https://trustworthy.systems/" target="_blank" rel="noopener noreferrer" class="logo-link">
+                <img src="img/ts_key.svg" alt="Trustworthy Systems" class="logo">
+            </a>
+            <div class="button-group">
+                <button id="compile-button" class="button compile">▶️ Compile and Run (F9)</button>
+                <button id="transpile-button" class="button transpile">🔄 Transpile (F10)</button>
+            </div>
         </div>
     </div>
     
     <div class="container" id="main-container">
         <div class="editor-panel">
             <div class="panel-header">
-                <span id="editor-title">Pancake Code Editor</span>
+                <span id="editor-title">📝 Pancake Code Editor (Edit Here!)</span>
             </div>
             <div id="editor"></div>
         </div>
@@ -38,7 +52,7 @@
                 
                 <div class="transpiler-panel">
                     <div class="panel-header">
-                        <span>Transpiler Output</span>
+                        <span>Transpiler Debug Output</span>
                     </div>
                     <div id="transpiler-output">Transpiler output will appear here...</div>
                 </div>
@@ -48,7 +62,7 @@
             
             <div class="viper-panel">
                 <div class="panel-header">
-                    <span>Viper Output</span>
+                    <span>🐍 Viper Model</span>
                 </div>
                 <div id="viper-editor"></div>
             </div>
@@ -56,8 +70,49 @@
     </div>
 
     <script src="lib/ace.js"></script>
-    <script src="lib/theme-monokai.js"></script>
+    <script src="lib/theme-pancake-light.js"></script>
     <script src="lib/pancake-highlight.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Basic splitter functionality
+        function initSplitters() {
+            const verticalSplitter = document.getElementById('vertical-splitter');
+            const compilerTranspilerSplitter = document.getElementById('compiler-transpiler-splitter');
+            const horizontalSplitter = document.getElementById('top-viper-splitter');
+            
+            // Add basic drag functionality
+            [verticalSplitter, compilerTranspilerSplitter, horizontalSplitter].forEach(splitter => {
+                splitter.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                    
+                    function onMouseMove(e) {
+                        // Basic resize logic would go here
+                        // You'll need to implement actual resize calculations
+                    }
+                    
+                    function onMouseUp() {
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F9') {
+                e.preventDefault();
+                document.getElementById('compile-button').click();
+            } else if (e.key === 'F10') {
+                e.preventDefault();
+                document.getElementById('transpile-button').click();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSplitters();
+        });
+    </script>
 </body>
 </html>

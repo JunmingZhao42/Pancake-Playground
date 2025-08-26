@@ -1,12 +1,12 @@
 const editor = ace.edit("editor");
-editor.setTheme("ace/theme/monokai");
+editor.setTheme("ace/theme/pancake_light");
 editor.session.setMode("ace/mode/pancake");
 editor.setFontSize(14);
 editor.getSession().setTabSize(2);
 editor.getSession().setUseSoftTabs(true);
 
 const viperEditor = ace.edit("viper-editor");
-viperEditor.setTheme("ace/theme/monokai");
+viperEditor.setTheme("ace/theme/pancake_light");
 viperEditor.session.setMode("ace/mode/pancake");
 viperEditor.setFontSize(14);
 viperEditor.setReadOnly(true);
@@ -77,7 +77,8 @@ async function transpile() {
             transpilerOutputElement.textContent = result.output;
             
             if (result.viperCode) {
-                viperEditor.setValue(result.viperCode, -1);
+                viperEditor.setValue(result.viperCode.replace(/^\n\n/, ''), -1);
+                // viperEditor.setValue(result.viperCode, -1);
                 viperEditor.clearSelection();
             }
         }
