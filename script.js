@@ -13,18 +13,39 @@ viperEditor.setReadOnly(true);
 viperEditor.getSession().setTabSize(2);
 viperEditor.getSession().setUseSoftTabs(true);
 
+const preludeEditor = ace.edit("prelude-editor");
+preludeEditor.setTheme("ace/theme/pancake_light");
+preludeEditor.session.setMode("ace/mode/pancake");
+preludeEditor.setFontSize(14);
+preludeEditor.setReadOnly(true);
+preludeEditor.getSession().setTabSize(2);
+preludeEditor.getSession().setUseSoftTabs(true);
+
 editor.setValue(`// Line comment: Write your Pancake code here
 /*
     Block comment
 */
+var a1 = 1;
+
 fun main() {
+  /@ requires acc(gv.a1) @/
+  /@ requires gv.a1 == 1 @/
+  /@ ensures acc(gv.a1) @/
+  /@ ensures gv.a1 == 3 @/
+  
+  a1 = a1 + 2;
+  @print(0,a1,0,1000);
+  
+  ///////////////
   var base_ptr = @base;
   st base_ptr, 42;
   var x = lds 1 base_ptr;
 
-  @print(0,x,0,1000);
+  // @print(0,x,0,2000);
   return 0;          
-}`, -1);
+}
+`
+, -1);
 
 async function compile() {
     const code = editor.getValue();
@@ -140,6 +161,7 @@ function initSplitters() {
             // Update editors size
             editor.resize();
             viperEditor.resize();
+            preludeEditor.resize();
         }
         
         function onMouseUp() {
@@ -180,6 +202,7 @@ function initSplitters() {
             compilerPanel.style.flex = 'none';
             
             viperEditor.resize();
+            preludeEditor.resize();
         }
         
         function onMouseUp() {
@@ -219,6 +242,7 @@ function initSplitters() {
             outputTopRow.style.flex = 'none';
             
             viperEditor.resize();
+            preludeEditor.resize();
         }
         
         function onMouseUp() {
@@ -240,12 +264,135 @@ function initSplitters() {
     window.addEventListener('resize', function() {
         editor.resize();
         viperEditor.resize();
+        preludeEditor.resize();
     });
 }
+
+const VIPER_PRELUDE = `domain BitVectorDomain64 interpretation (SMTLIB: "(_ BitVec 64)", Boogie: "bv64") {
+  
+  function not(a: BitVectorDomain64): BitVectorDomain64 interpretation "bvnot"
+  
+  function bv64_xor(a: BitVectorDomain64, b: BitVectorDomain64): BitVectorDomain64 interpretation "bvxor"
+  
+  function bv64_and(a: BitVectorDomain64, b: BitVectorDomain64): BitVectorDomain64 interpretation "bvand"
+  
+  function bv64_or(a: BitVectorDomain64, b: BitVectorDomain64): BitVectorDomain64 interpretation "bvor"
+  
+  function bv64_shl(a: BitVectorDomain64, b: BitVectorDomain64): BitVectorDomain64 interpretation "bvshl"
+  
+  function bv64_lshr(a: BitVectorDomain64, b: BitVectorDomain64): BitVectorDomain64 interpretation "bvlshr"
+  
+  function bv64_ashr(a: BitVectorDomain64, b: BitVectorDomain64): BitVectorDomain64 interpretation "bvashr"
+  
+  function bv64_from_int(i: Int): BitVectorDomain64 interpretation "(_ int2bv 64)"
+  
+  function bv64_to_int(i: BitVectorDomain64): Int interpretation "(_ bv2int 64)"
+}
+
+field local_mem: Int
+
+field shared_mem: Int
+
+function bounded8(x: Int): Bool
+{
+  0 <= x && x < 4 * 64
+}
+
+function bounded16(x: Int): Bool
+{
+  0 <= x && x < 4 * 16384
+}
+
+function bounded32(x: Int): Bool
+{
+  0 <= x && x < 4 * 1073741824
+}
+
+function bounded64(x: Int): Bool
+{
+  0 <= x && x < 4 * 4611686018427387904
+}
+
+function bounded(x: Int): Bool
+{
+  bounded64(x)
+}
+
+method shared_load8(heap: Seq[Ref], gv: Ref, address: Int)
+  returns (value: Int)
+  ensures bounded8(value)
+
+
+method shared_store8(heap: Seq[Ref], gv: Ref, address: Int, value: Int)
+  requires bounded8(value)
+
+
+method shared_load16(heap: Seq[Ref], gv: Ref, address: Int)
+  returns (value: Int)
+  ensures bounded16(value)
+
+
+method shared_store16(heap: Seq[Ref], gv: Ref, address: Int, value: Int)
+  requires bounded16(value)
+
+
+method shared_load32(heap: Seq[Ref], gv: Ref, address: Int)
+  returns (value: Int)
+  ensures bounded32(value)
+
+
+method shared_store32(heap: Seq[Ref], gv: Ref, address: Int, value: Int)
+  requires bounded32(value)
+
+
+method shared_load64(heap: Seq[Ref], gv: Ref, address: Int)
+  returns (value: Int)
+  ensures bounded64(value)
+
+
+method shared_store64(heap: Seq[Ref], gv: Ref, address: Int, value: Int)
+  requires bounded64(value)
+
+`
+async function initViperTabs() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    preludeEditor.setValue(VIPER_PRELUDE, -1);
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const targetTab = e.target.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and panes
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding pane
+            e.target.classList.add('active');
+            document.getElementById(`${targetTab}-tab`).classList.add('active');
+            
+            // Refresh editors when switching tabs
+            setTimeout(() => {
+                if (targetTab === 'prelude') {
+                    preludeEditor.resize();
+                } else {
+                    window.viperEditor?.resize();
+                }
+            }, 10);
+        });
+    });
+}
+
+// Call this after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initViperTabs();
+});
 
 document.addEventListener('DOMContentLoaded', initSplitters);
 
 window.addEventListener('load', function() {
     editor.resize();
     viperEditor.resize();
+    preludeEditor.resize();
 });

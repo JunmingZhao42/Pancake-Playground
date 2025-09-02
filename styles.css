@@ -109,7 +109,7 @@ body {
     background: #e2e2e2da;
     padding: 8px 16px;
     border-bottom: 1px solid #ddd;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     color: #555;
 }
@@ -173,11 +173,68 @@ body {
     background: #4CAF50;
 }
 
-.viper-panel {
+.viper-panel{
     flex: 1;
     display: flex;
     flex-direction: column;
     border-top: 1px solid #ddd;
+}
+
+.viper-panel .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.tab-controls {
+    display: flex;
+    gap: 8px;
+    margin-left: 0;
+}
+
+.tab-button {
+    background: rgb(255, 255, 255);
+    border: none;
+    color: #333;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.tab-button:hover {
+    background: #63636375;
+}
+
+.tab-button.active {
+    background: #4CAF50;
+    color: white;
+}
+
+.tab-content {
+    position: relative;
+    height: calc(100% - 40px);
+}
+
+.tab-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+#prelude-editor, #viper-editor {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    background: #f8f9fa;
 }
 
 #compiler-output, #transpiler-output {
@@ -194,11 +251,6 @@ body {
 
 #transpiler-output {
     border-right: none;
-}
-
-#viper-editor {
-    flex: 1;
-    background: #f8f9fa;
 }
 
 /* Scrollbar styling */

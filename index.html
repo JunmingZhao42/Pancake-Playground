@@ -59,13 +59,23 @@
             </div>
             
             <div class="horizontal-splitter" id="top-viper-splitter"></div>
-            
             <div class="viper-panel">
                 <div class="panel-header">
                     <span>🐍 Viper Model</span>
+                    <div class="tab-controls">
+                        <button class="tab-button" data-tab="prelude">Prelude</button>
+                        <button class="tab-button active" data-tab="model">Model Output</button>
+                    </div>
                 </div>
-                <div id="viper-editor"></div>
-            </div>
+                <div class="tab-content">
+                    <div id="prelude-tab" class="tab-pane">
+                        <div id="prelude-editor"></div>
+                    </div>
+                    <div id="model-tab" class="tab-pane active">
+                        <div id="viper-editor"></div>
+                    </div>
+                </div>
+</div>
         </div>
     </div>
 

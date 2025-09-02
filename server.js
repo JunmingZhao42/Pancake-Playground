@@ -110,7 +110,7 @@ app.post('/compile2', (req, res) => {
         return res.status(500).json({ error: `Failed to write source file: ${err.message}` });
     }
 
-    const transpilerCmd = `${VIPER_TRANSPILER} transpile ${sourceFile} ${viperFile} --disable-prelude`;
+    const transpilerCmd = `${VIPER_TRANSPILER} transpile ${sourceFile} ${viperFile} --disable-prelude --disable-overflow-check`;
     
     exec(transpilerCmd, (error1, stdout1, stderr1) => {
         if (error1) {
