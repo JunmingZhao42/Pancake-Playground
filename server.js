@@ -53,7 +53,7 @@ app.post('/compile1', (req, res) => {
         return res.status(500).json({ error: `Failed to write source file: ${err.message}` });
     }
 
-    const compileCmd1 = `${CAKE_EXE} --pancake --main_return=true --target=arm8 < ${sourceFile} > ${assemblyFile}`;
+    const compileCmd1 = `${CAKE_EXE} --pancake --main_return=true < ${sourceFile} > ${assemblyFile}`;
     exec(compileCmd1, (error1, stdout1, stderr1) => {
         if (error1) {
             cleanupFiles([sourceFile]);
